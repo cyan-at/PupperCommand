@@ -18,41 +18,49 @@ while True:
     print("running")
     values = joystick.get_input()
 
-    left_y = -values["left_analog_y"]
-    right_y = -values["right_analog_y"]
-    right_x = values["right_analog_x"]
-    left_x = values["left_analog_x"]
-
-    L2 = values["l2_analog"]
-    R2 = values["r2_analog"]
-
+    # discrete
     R1 = values["button_r1"]
+    x = values["button_cross"]
     L1 = values["button_l1"]
 
+    # continuous
+    left_y = -values["left_analog_y"]
+    left_x = values["left_analog_x"]
+    right_x = values["right_analog_x"]
+    right_y = -values["right_analog_y"]
+    dpady = values["dpad_up"] - values["dpad_down"]
+    dpadx = values["dpad_right"] - values["dpad_left"]
+
+    # unused
+    L2 = values["l2_analog"]
+    R2 = values["r2_analog"]
     square = values["button_square"]
-    x = values["button_cross"]
     circle = values["button_circle"]
     triangle = values["button_triangle"]
 
-    dpadx = values["dpad_right"] - values["dpad_left"]
-    dpady = values["dpad_up"] - values["dpad_down"]
-
     msg = {
+        # discrete between 0 (off) and 1 (on)
+        "R1": R1,
+        "x": x,
+        "L1": L1,
+
+        # continuous these all go between 0.0 and 1.0
         "ly": left_y,
         "lx": left_x,
         "rx": right_x,
         "ry": right_y,
-        "L2": L2,
-        "R2": R2,
-        "R1": R1,
-        "L1": L1,
         "dpady": dpady,
         "dpadx": dpadx,
-        "x": x,
+
+        # other
+        "message_rate": MESSAGE_RATE,
+
+        # unused
+        "L2": L2,
+        "R2": R2,
         "square": square,
         "circle": circle,
         "triangle": triangle,
-        "message_rate": MESSAGE_RATE,
     }
     joystick_pub.send(msg)
 
